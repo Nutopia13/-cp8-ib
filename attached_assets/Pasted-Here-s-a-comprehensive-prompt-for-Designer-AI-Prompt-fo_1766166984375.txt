@@ -1,0 +1,286 @@
+Here's a comprehensive prompt for Designer AI:
+
+Prompt for Designer AI: Trading Analytics Dashboard
+Project Overview:
+Design a professional trading analytics web dashboard with multiple views for analyzing Initial Balance (IB) breakout patterns, reversals, and market structure. Use dummy/placeholder data for all charts and metrics.
+
+Design Requirements:
+
+Core Specifications
+Layout System: Bento grid (modular card-based layout)
+
+Theme: Dark mode only
+
+Style: Modern, clean, minimalist, data-focused
+
+Readability: High contrast, clear typography, intuitive data visualization
+
+Best Practices: Follow UI/UX best practices for financial dashboards (Bloomberg Terminal, TradingView style)
+
+Color Palette (Dark Theme)
+text
+Background Primary: #0a0a0a or #0d0d0d
+Background Secondary (Cards): #1a1a1a or #181818
+Accent Blue (Bullish): #3b82f6 or #2563eb
+Accent Red (Bearish): #ef4444 or #dc2626
+Accent Green (Success): #10b981 or #22c55e
+Accent Yellow (Warning): #f59e0b or #eab308
+Text Primary: #ffffff or #fafafa
+Text Secondary: #a1a1aa or #71717a
+Borders/Dividers: #27272a or #2a2a2a
+Chart Grid Lines: #1f1f1f (subtle)
+Typography
+Font Family: Inter, Geist Sans, or SF Pro Display
+
+Headings: 600-700 weight
+
+Body: 400-500 weight
+
+Monospace (numbers/data): JetBrains Mono or IBM Plex Mono
+
+Dashboard 1: Breakouts Analysis
+Header:
+
+Title: "CP-8" (top-left, large, bold)
+
+Subtitle: "Breakouts Analysis - NY Session"
+
+Date range indicator: "Jan 1 - Dec 31, 2025"
+
+Navigation tabs: [Breakouts | Reversals | Structure]
+
+Bento Grid Layout:
+
+text
+┌────────────────────────────────────────────────────┐
+│  CP-8                              [Nav: Breakouts]│
+│  Breakouts Analysis - NY Session                   │
+├─────────────────────────────┬──────────────────────┤
+│                             │  Quick Stats         │
+│  Main Chart:                │  ┌────────────────┐ │
+│  Breakout Probability       │  │ Total Sessions │ │
+│  by IB Time                 │  │     250        │ │
+│  (Line chart)               │  ├────────────────┤ │
+│                             │  │ Avg Breakouts  │ │
+│  [7:30 to 16:00 on X-axis]  │  │     78%        │ │
+│  [0-100% on Y-axis]         │  ├────────────────┤ │
+│                             │  │ Peak Time      │ │
+│                             │  │  10:30-11:00   │ │
+│                             │  └────────────────┘ │
+├─────────────────────────────┴──────────────────────┤
+│  Detailed Breakout Statistics Table                │
+│  [IB Time | Sessions | Only↑ | Only↓ | Both | %]  │
+│  (17 rows with color-coded percentages)            │
+├─────────────────────────────┬──────────────────────┤
+│  Heatmap:                   │  Key Insights        │
+│  Breakout by Hour           │  • Highest: 86.4%    │
+│  (Visual grid)              │  • Lowest: 42.4%     │
+│                             │  • Optimal: 10:00    │
+│                             │  • Recommendations   │
+└─────────────────────────────┴──────────────────────┘
+Card Specifications:
+
+Main Chart Card - Line chart with gradient fill, hover tooltips, grid lines
+
+Quick Stats Card - Large numbers, icon indicators, sparklines
+
+Data Table Card - Sticky header, sortable columns, row hover effects, color-coded cells
+
+Heatmap Card - Time-based grid visualization with color intensity
+
+Insights Card - Bullet points with icons (✓, ⚠️, 📊)
+
+Dashboard 2: Reversals Analysis
+Header:
+
+Title: "CP-8"
+
+Subtitle: "Reversals Analysis - NY Session"
+
+Date range: "Jan 1 - Dec 31, 2025"
+
+Navigation tabs: [Breakouts | Reversals | Structure]
+
+Bento Grid Layout:
+
+text
+┌────────────────────────────────────────────────────┐
+│  CP-8                              [Nav: Reversals]│
+│  Reversals Analysis - NY Session                   │
+├──────────────────┬─────────────────────────────────┤
+│  Reversal Rate   │  Reversal Probability Chart     │
+│  by IB Time      │  (Bar chart horizontal)         │
+│  (Donut chart)   │  07:30-08:00: ████████ 86.4%   │
+│                  │  08:00-08:30: ███████  82.0%   │
+│  High Risk: 74%  │  ...                            │
+│  Low Risk: 43%   │  10:00-10:30: ███      42.4%   │
+│                  │  (Color-coded: red>70%, yellow  │
+│                  │   50-70%, green<50%)            │
+├──────────────────┴─────────────────────────────────┤
+│  Time-Based Reversal Patterns                      │
+│  (Area chart showing reversal % across day)        │
+│  [Shaded regions: Pre-market | NYSE Open | Day]    │
+├──────────────────┬─────────────────────────────────┤
+│  Risk Zones      │  Comparative Analysis           │
+│  • 07:30-09:00   │  IB1 vs IB2 Extension          │
+│    ⚠️ Very High   │  [Scatter plot or comparison]  │
+│  • 09:30-10:00   │  When IB1 > IB2: 65% reversal  │
+│    ⚠️ High        │  When IB1 < IB2: 45% reversal  │
+│  • 10:00-11:00   │  Difference: +20%              │
+│    ✓ Optimal     │                                │
+└──────────────────┴─────────────────────────────────┘
+Dashboard 3: Structure Analysis
+Header:
+
+Title: "CP-8"
+
+Subtitle: "Market Structure Analysis - NY Session"
+
+Date range: "Jan 1 - Dec 31, 2025"
+
+Navigation tabs: [Breakouts | Reversals | Structure]
+
+Bento Grid Layout:
+
+text
+┌────────────────────────────────────────────────────┐
+│  CP-8                              [Nav: Structure]│
+│  Market Structure Analysis - NY Session            │
+├─────────────────┬──────────────────────────────────┤
+│  IB Range Size  │  Retest Analysis                 │
+│  Distribution   │  ┌──────────────────────────┐   │
+│  (Histogram)    │  │ Retest Probability: 68%  │   │
+│                 │  │ Success Rate: 72%        │   │
+│  Avg: $850      │  │ Avg Time: 45 min         │   │
+│  Max: $2,400    │  └──────────────────────────┘   │
+│  Min: $200      │  (Pie chart: Retest/No Retest)  │
+├─────────────────┴──────────────────────────────────┤
+│  IB Extension Comparison Matrix                    │
+│  [9:30-10:00 vs 10:00-11:00 comparison table]     │
+│  IB1 > IB2 | IB1 < IB2 | IB1 ≈ IB2                │
+│  (With breakout percentages for each scenario)     │
+├─────────────────┬──────────────────────────────────┤
+│  Volume Profile │  Session Timeline                │
+│  (Vertical bars)│  (Gantt-style breakdown)         │
+│  High volume    │  Pre-market | Open | Lunch | EOD│
+│  periods        │  (Visual timeline with metrics)  │
+└─────────────────┴──────────────────────────────────┘
+Global Design Elements
+Navigation:
+
+Sticky header with tab navigation
+
+Active tab highlighted with accent color and underline
+
+Smooth transitions between dashboards
+
+Cards (All Dashboards):
+
+Border-radius: 12px
+
+Padding: 20-24px
+
+Gap between cards: 16px
+
+Subtle shadow: 0 2px 8px rgba(0,0,0,0.4)
+
+Hover effect: slight glow or elevation
+
+Optional: subtle border 1px solid #27272a
+
+Charts (Use Dummy Data):
+
+Dark backgrounds with subtle grid lines
+
+Color-coded data points (green/red for bullish/bearish)
+
+Smooth animations on load
+
+Interactive tooltips on hover
+
+Legend placement: top-right or bottom
+
+Axis labels: clear, visible, secondary text color
+
+Data Tables:
+
+Zebra striping (alternating row colors)
+
+Sticky headers
+
+Sortable columns (arrow indicators)
+
+Right-align numbers, left-align text
+
+Color-coded cells for percentages:
+
+Green: favorable
+
+Red: unfavorable
+
+Yellow: neutral/moderate
+
+Monospace font for numerical data
+
+Icons & Indicators:
+
+Use simple, outline-style icons
+
+Status indicators: ✓ (green), ⚠️ (yellow), ✗ (red)
+
+Trend arrows: ↑ ↓ →
+
+Consistent sizing: 16-20px
+
+Responsive Design:
+
+Desktop (1920px): Full bento grid
+
+Laptop (1440px): Adjusted proportions
+
+Tablet (768px): 2-column layout
+
+Mobile (375px): Single column, stacked cards
+
+Accessibility:
+
+High contrast ratios (WCAG AA compliant)
+
+Clear focus states for interactive elements
+
+Readable font sizes (minimum 14px body text)
+
+Descriptive labels for charts
+
+Deliverables
+3 full dashboard designs (Breakouts, Reversals, Structure)
+
+Component library (cards, charts, tables, navigation)
+
+Design system documentation (colors, typography, spacing)
+
+Desktop & mobile views for each dashboard
+
+Interactive prototype (if possible) showing navigation between dashboards
+
+Style References:
+
+Bloomberg Terminal (data density, professional)
+
+TradingView (clean charts, dark mode)
+
+Stripe Dashboard (modern cards, spacing)
+
+Linear App (bento grid layout, minimalism)
+
+Dummy Data to Include:
+
+Use realistic numbers from financial markets
+
+Show variety in data (high/low percentages, different times)
+
+Include edge cases (0%, 100%, very small numbers)
+
+Make charts visually interesting with variation
+
+Final Note: Prioritize readability and data clarity over decorative elements. The dashboard should feel professional, fast, and purpose-built for trading analysis. Every element should serve a function.
