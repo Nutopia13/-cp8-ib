@@ -9,13 +9,17 @@ interface DashboardLayoutProps {
   dateRange?: string;
 }
 
+import { useTimezone } from "@/lib/timezone-context";
+
 export function DashboardLayout({ children, title = "CP-8", subtitle, dateRange }: DashboardLayoutProps) {
   const [location] = useLocation();
+  const { timezone, setTimezone } = useTimezone();
 
   const tabs = [
     { name: "Breakouts", path: "/" },
     { name: "Reversals", path: "/reversals" },
     { name: "Structure", path: "/structure" },
+    { name: "Cross-Analysis", path: "/cross-analysis" },
   ];
 
   return (
@@ -28,16 +32,16 @@ export function DashboardLayout({ children, title = "CP-8", subtitle, dateRange 
               <h1 className="text-xl font-bold tracking-tight">{title}</h1>
               {subtitle && <p className="text-xs text-muted-foreground hidden sm:block">{subtitle}</p>}
             </div>
-            
+
             <nav className="flex items-center space-x-1 bg-muted/50 p-1 rounded-lg">
               {tabs.map((tab) => {
                 // Determine if this tab is active. 
                 // For root path "/", only active if location is strictly "/"
                 // For other paths, active if location starts with path
-                const isActive = tab.path === "/" 
-                  ? location === "/" 
+                const isActive = tab.path === "/"
+                  ? location === "/"
                   : location.startsWith(tab.path);
-                  
+
                 return (
                   <Link key={tab.path} href={tab.path}>
                     <span
@@ -57,6 +61,24 @@ export function DashboardLayout({ children, title = "CP-8", subtitle, dateRange 
           </div>
 
           <div className="flex items-center gap-4">
+            {/* Timezone Switcher */}
+            <div className="flex items-center bg-muted/50 p-1 rounded-md">
+              {(['NY', 'Kiev', 'Warsaw'] as const).map((tz) => (
+                <button
+                  key={tz}
+                  onClick={() => setTimezone(tz)}
+                  className={cn(
+                    "px-3 py-1 text-xs font-medium rounded-sm transition-all",
+                    timezone === tz
+                      ? "bg-background text-foreground shadow-sm"
+                      : "text-muted-foreground hover:text-foreground"
+                  )}
+                >
+                  {tz}
+                </button>
+              ))}
+            </div>
+
             {dateRange && (
               <div className="hidden md:flex items-center px-3 py-1 rounded-md bg-muted/30 border border-border text-xs text-muted-foreground font-mono">
                 {dateRange}

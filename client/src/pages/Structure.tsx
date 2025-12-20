@@ -1,10 +1,10 @@
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { BentoGrid, BentoCard } from "@/components/ui/bento-grid";
-import { 
-  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, 
+import {
+  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
   PieChart, Pie, Cell, ScatterChart, Scatter, Legend, LineChart, Line, ComposedChart, Area
 } from "recharts";
-import { structureDistData, retestData, volumeProfileData } from "@/lib/mock-data";
+import { structureDistData, retestData, volumeProfileData, comparisonData } from "@/lib/mock-data";
 import { TrendingUp, TrendingDown, Zap, Activity, ArrowUpRight, ArrowDownRight, BarChart3 } from "lucide-react";
 
 const ComparisonTooltip = ({ active, payload, label }: any) => {
@@ -20,48 +20,42 @@ const ComparisonTooltip = ({ active, payload, label }: any) => {
   return null;
 };
 
-const comparisonData = [
-  { condition: 'IB1 > IB2', x: 72, y: 28, breakout: 72, reversal: 28, count: 145 },
-  { condition: 'IB1 < IB2', x: 45, y: 55, breakout: 45, reversal: 55, count: 82 },
-  { condition: 'IB1 ≈ IB2', x: 50, y: 50, breakout: 50, reversal: 50, count: 23 },
-];
-
 export default function Structure() {
   return (
-    <DashboardLayout 
+    <DashboardLayout
       subtitle="Market Structure Analysis - NY Session"
       dateRange="Jan 1 - Dec 31, 2025"
     >
       <BentoGrid>
-        
+
         {/* IB Range Size Distribution - Left Histogram */}
         <BentoCard colSpan={4} rowSpan={2} title="IB Range Distribution">
           <div className="h-[300px] w-full">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart 
+              <BarChart
                 data={structureDistData}
                 margin={{ top: 10, right: 15, left: 10, bottom: 20 }}
               >
                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="var(--color-border)" opacity={0.3} />
-                <XAxis 
-                  dataKey="range" 
-                  fontSize={10} 
-                  tickLine={false} 
-                  axisLine={false} 
+                <XAxis
+                  dataKey="range"
+                  fontSize={10}
+                  tickLine={false}
+                  axisLine={false}
                   stroke="var(--color-muted-foreground)"
                   angle={-45}
                   textAnchor="end"
                   height={60}
                 />
-                <YAxis 
-                  fontSize={10} 
-                  tickLine={false} 
-                  axisLine={false} 
-                  stroke="var(--color-muted-foreground)" 
+                <YAxis
+                  fontSize={10}
+                  tickLine={false}
+                  axisLine={false}
+                  stroke="var(--color-muted-foreground)"
                   label={{ value: 'Frequency', angle: -90, position: 'insideLeft' }}
                 />
-                <Tooltip 
-                  cursor={{ fill: 'var(--color-muted)/30' }} 
+                <Tooltip
+                  cursor={{ fill: 'var(--color-muted)/30' }}
                   contentStyle={{
                     backgroundColor: 'var(--color-popover)',
                     border: '1px solid var(--color-border)',
@@ -96,31 +90,31 @@ export default function Structure() {
             <ResponsiveContainer width="100%" height="100%">
               <ScatterChart margin={{ top: 10, right: 20, bottom: 10, left: 40 }}>
                 <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" opacity={0.3} />
-                <XAxis 
-                  dataKey="x" 
-                  name="Breakout %" 
-                  domain={[0, 100]} 
-                  stroke="var(--color-muted-foreground)" 
-                  fontSize={10} 
+                <XAxis
+                  dataKey="x"
+                  name="Breakout %"
+                  domain={[0, 100]}
+                  stroke="var(--color-muted-foreground)"
+                  fontSize={10}
                   tickLine={false}
                   label={{ value: 'Breakout %', position: 'bottom', offset: 0, fontSize: 10 }}
                 />
-                <YAxis 
-                  dataKey="y" 
-                  name="Reversal %" 
-                  domain={[0, 100]} 
-                  stroke="var(--color-muted-foreground)" 
+                <YAxis
+                  dataKey="y"
+                  name="Reversal %"
+                  domain={[0, 100]}
+                  stroke="var(--color-muted-foreground)"
                   fontSize={10}
                   tickLine={false}
                   label={{ value: 'Reversal %', angle: -90, position: 'left' }}
                 />
-                <Tooltip 
+                <Tooltip
                   cursor={{ strokeDasharray: '3 3' }}
                   content={<ComparisonTooltip />}
                 />
-                <Scatter 
-                  name="Market Structure" 
-                  data={comparisonData} 
+                <Scatter
+                  name="Market Structure"
+                  data={comparisonData}
                   fill="var(--color-bullish)"
                   fillOpacity={0.6}
                   shape="circle"
@@ -154,7 +148,7 @@ export default function Structure() {
                 </PieChart>
               </ResponsiveContainer>
             </div>
-            
+
             <div className="grid grid-cols-3 gap-2 text-xs">
               <div className="p-2 bg-success/10 border border-success/30 rounded-lg">
                 <p className="text-muted-foreground text-[10px] mb-1">Retest Prob</p>
@@ -206,7 +200,7 @@ export default function Structure() {
                   <td className="px-4 py-3 text-right">
                     <div className="flex justify-end">
                       <div className="w-24 h-1.5 bg-muted rounded-full overflow-hidden">
-                        <div className="h-full bg-gradient-to-r from-bullish to-success" style={{width: '72%'}}></div>
+                        <div className="h-full bg-gradient-to-r from-bullish to-success" style={{ width: '72%' }}></div>
                       </div>
                     </div>
                   </td>
@@ -229,7 +223,7 @@ export default function Structure() {
                   <td className="px-4 py-3 text-right">
                     <div className="flex justify-end">
                       <div className="w-24 h-1.5 bg-muted rounded-full overflow-hidden">
-                        <div className="h-full bg-gradient-to-r from-warning to-muted-foreground" style={{width: '45%'}}></div>
+                        <div className="h-full bg-gradient-to-r from-warning to-muted-foreground" style={{ width: '45%' }}></div>
                       </div>
                     </div>
                   </td>
@@ -252,7 +246,7 @@ export default function Structure() {
                   <td className="px-4 py-3 text-right">
                     <div className="flex justify-end">
                       <div className="w-24 h-1.5 bg-muted rounded-full overflow-hidden">
-                        <div className="h-full bg-muted-foreground" style={{width: '50%'}}></div>
+                        <div className="h-full bg-muted-foreground" style={{ width: '50%' }}></div>
                       </div>
                     </div>
                   </td>
@@ -266,12 +260,12 @@ export default function Structure() {
         <BentoCard colSpan={6} rowSpan={2} title="Volume Profile by Price Level">
           <div className="h-[250px] w-full flex items-end justify-between gap-0.5 px-2">
             {volumeProfileData.map((d, i) => (
-              <div 
-                key={i} 
-                className="w-full flex flex-col justify-end group h-full relative hover:brightness-150 transition-all" 
+              <div
+                key={i}
+                className="w-full flex flex-col justify-end group h-full relative hover:brightness-150 transition-all"
                 title={`Price: $${d.priceLevel} Vol: ${d.volume}`}
               >
-                <div 
+                <div
                   className="w-full bg-gradient-to-t from-bullish via-bullish to-bullish/30 rounded-t-sm shadow-sm group-hover:shadow-bullish/30 transition-all"
                   style={{ height: `${(d.volume / 1000) * 100}%`, minHeight: '2px' }}
                 >

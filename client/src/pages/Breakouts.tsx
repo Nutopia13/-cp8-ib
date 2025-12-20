@@ -1,7 +1,7 @@
 import { DashboardLayout } from "@/components/layout/DashboardLayout";
 import { BentoGrid, BentoCard } from "@/components/ui/bento-grid";
-import { 
-  LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Area, ComposedChart 
+import {
+  LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Area, ComposedChart
 } from "recharts";
 import { breakoutTimeData, breakoutStats, breakoutTableData, heatmapData } from "@/lib/mock-data";
 import { ArrowUp, ArrowDown, Activity, Info, TrendingUp, TrendingDown, Clock, AlertCircle } from "lucide-react";
@@ -20,12 +20,21 @@ const CustomTooltip = ({ active, payload, label }: any) => {
   return null;
 };
 
+import { useTimezone } from "@/lib/timezone-context";
+
 export default function Breakouts() {
+  const { formatTime } = useTimezone();
+
+  // Transform data for charts/tables with timezone
+  const localizedTimeData = breakoutTimeData.map(d => ({ ...d, time: formatTime(d.time) }));
+  const localizedTableData = breakoutTableData.map(d => ({ ...d, time: formatTime(d.time) }));
+
   const days = ["Mon", "Tue", "Wed", "Thu", "Fri"];
   const hours = ["07:00", "08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00"];
+  const localizedHours = hours.map(h => formatTime(h));
 
   return (
-    <DashboardLayout 
+    <DashboardLayout
       subtitle="Breakouts Analysis - NY Session"
       dateRange="Jan 1 - Dec 31, 2025"
     >
@@ -37,33 +46,33 @@ export default function Breakouts() {
               <LineChart data={breakoutTimeData} margin={{ top: 5, right: 20, bottom: 5, left: 0 }}>
                 <defs>
                   <linearGradient id="colorProb" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="var(--color-bullish)" stopOpacity={0.3}/>
-                    <stop offset="95%" stopColor="var(--color-bullish)" stopOpacity={0}/>
+                    <stop offset="5%" stopColor="var(--color-bullish)" stopOpacity={0.3} />
+                    <stop offset="95%" stopColor="var(--color-bullish)" stopOpacity={0} />
                   </linearGradient>
                 </defs>
                 <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" vertical={false} opacity={0.5} />
-                <XAxis 
-                  dataKey="time" 
-                  stroke="var(--color-muted-foreground)" 
-                  fontSize={12} 
-                  tickLine={false} 
+                <XAxis
+                  dataKey="time"
+                  stroke="var(--color-muted-foreground)"
+                  fontSize={12}
+                  tickLine={false}
                   axisLine={false}
                   minTickGap={30}
                 />
-                <YAxis 
-                  stroke="var(--color-muted-foreground)" 
-                  fontSize={12} 
-                  tickLine={false} 
-                  axisLine={false} 
+                <YAxis
+                  stroke="var(--color-muted-foreground)"
+                  fontSize={12}
+                  tickLine={false}
+                  axisLine={false}
                   domain={[0, 100]}
                   unit="%"
                 />
                 <Tooltip content={<CustomTooltip />} cursor={{ stroke: 'var(--color-muted-foreground)', strokeWidth: 1 }} />
-                <Line 
-                  type="monotone" 
-                  dataKey="probability" 
-                  stroke="var(--color-bullish)" 
-                  strokeWidth={2} 
+                <Line
+                  type="monotone"
+                  dataKey="probability"
+                  stroke="var(--color-bullish)"
+                  strokeWidth={2}
                   dot={false}
                   activeDot={{ r: 6, fill: "var(--color-bullish)" }}
                 />
@@ -91,7 +100,7 @@ export default function Breakouts() {
               <span className="text-xs text-muted-foreground flex items-center gap-1">
                 <Clock size={12} /> Peak Breakout Time
               </span>
-              <span className="text-xl font-mono font-bold mt-1 text-warning">{breakoutStats.peakTime}</span>
+              <span className="text-xl font-mono font-bold mt-1 text-warning">{formatTime(breakoutStats.peakTime)}</span>
             </div>
           </div>
         </BentoCard>
@@ -105,7 +114,7 @@ export default function Breakouts() {
               </div>
               <div>
                 <p className="text-sm font-medium">Highest Probability</p>
-                <p className="text-xs text-muted-foreground">Breakouts peak at {breakoutStats.highest} during 10:30 AM window.</p>
+                <p className="text-xs text-muted-foreground">Breakouts peak at {breakoutStats.highest} during {formatTime("14:00")}-{formatTime("15:00")} window.</p>
               </div>
             </div>
             <div className="flex items-start gap-3">
@@ -114,7 +123,7 @@ export default function Breakouts() {
               </div>
               <div>
                 <p className="text-sm font-medium">Lowest Probability</p>
-                <p className="text-xs text-muted-foreground">Avoid entries after 14:00 ({breakoutStats.lowest} success rate).</p>
+                <p className="text-xs text-muted-foreground">Early morning ({formatTime("07:30")}) is chop city ({breakoutStats.lowest} success rate).</p>
               </div>
             </div>
           </div>
@@ -135,7 +144,7 @@ export default function Breakouts() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-border/50">
-                {breakoutTableData.map((row, i) => (
+                {localizedTableData.map((row, i) => (
                   <tr key={i} className="hover:bg-muted/20 transition-colors group">
                     <td className="px-4 py-2 font-mono text-muted-foreground group-hover:text-foreground">{row.time}</td>
                     <td className="px-4 py-2 font-mono text-right">{row.sessions}</td>
@@ -144,8 +153,8 @@ export default function Breakouts() {
                     <td className="px-4 py-2 font-mono text-right text-warning/80">{row.both}</td>
                     <td className="px-4 py-2 font-mono text-right">
                       <span className={
-                        row.pct > 75 ? "text-success font-bold" : 
-                        row.pct > 50 ? "text-warning" : "text-bearish"
+                        row.pct > 75 ? "text-success font-bold" :
+                          row.pct > 50 ? "text-warning" : "text-bearish"
                       }>
                         {row.pct}%
                       </span>
@@ -160,34 +169,34 @@ export default function Breakouts() {
         {/* Heatmap */}
         <BentoCard colSpan={4} rowSpan={2} title="Breakout Intensity by Hour">
           <div className="flex flex-col h-full">
-             <div className="flex justify-between mb-2 pl-8">
-               {hours.filter((_, i) => i % 2 === 0).map(h => (
-                 <span key={h} className="text-[10px] text-muted-foreground font-mono">{h}</span>
-               ))}
-             </div>
-             <div className="flex-1 flex gap-2">
-               <div className="flex flex-col justify-between py-1 text-[10px] text-muted-foreground font-mono w-6">
-                 {days.map(d => <span key={d}>{d}</span>)}
-               </div>
-               <div className="flex-1 grid grid-cols-9 gap-1">
-                 {heatmapData.slice(0, 5).flatMap((dayRow, dayIndex) => 
-                    dayRow.map((cell, hourIndex) => (
-                      <div 
-                        key={`${dayIndex}-${hourIndex}`}
-                        className="rounded-sm transition-all hover:ring-1 ring-foreground relative group"
-                        style={{
-                          backgroundColor: `hsl(var(--bullish) / ${cell.value / 100})`,
-                          opacity: 0.5 + (cell.value / 200)
-                        }}
-                      >
-                         <div className="opacity-0 group-hover:opacity-100 absolute bottom-full left-1/2 -translate-x-1/2 mb-1 bg-popover text-popover-foreground text-[10px] px-2 py-1 rounded shadow-xl pointer-events-none whitespace-nowrap z-50">
-                           {days[dayIndex]} {hours[hourIndex]}: {Math.round(cell.value)}%
-                         </div>
+            <div className="flex justify-between mb-2 pl-8">
+              {localizedHours.filter((_, i) => i % 2 === 0).map(h => (
+                <span key={h} className="text-[10px] text-muted-foreground font-mono">{h}</span>
+              ))}
+            </div>
+            <div className="flex-1 flex gap-2">
+              <div className="flex flex-col justify-between py-1 text-[10px] text-muted-foreground font-mono w-6">
+                {days.map(d => <span key={d}>{d}</span>)}
+              </div>
+              <div className="flex-1 grid grid-cols-9 gap-1">
+                {heatmapData.slice(0, 5).flatMap((dayRow, dayIndex) =>
+                  dayRow.map((cell, hourIndex) => (
+                    <div
+                      key={`${dayIndex}-${hourIndex}`}
+                      className="rounded-sm transition-all hover:ring-1 ring-foreground relative group"
+                      style={{
+                        backgroundColor: `hsl(var(--bullish) / ${cell.value / 100})`,
+                        opacity: 0.5 + (cell.value / 200)
+                      }}
+                    >
+                      <div className="opacity-0 group-hover:opacity-100 absolute bottom-full left-1/2 -translate-x-1/2 mb-1 bg-popover text-popover-foreground text-[10px] px-2 py-1 rounded shadow-xl pointer-events-none whitespace-nowrap z-50">
+                        {days[dayIndex]} {hours[hourIndex]}: {Math.round(cell.value)}%
                       </div>
-                    ))
-                 )}
-               </div>
-             </div>
+                    </div>
+                  ))
+                )}
+              </div>
+            </div>
           </div>
         </BentoCard>
 

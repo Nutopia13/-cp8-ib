@@ -7,6 +7,7 @@ import NotFound from "@/pages/not-found";
 import Breakouts from "@/pages/Breakouts";
 import Reversals from "@/pages/Reversals";
 import Structure from "@/pages/Structure";
+import CrossAnalysis from "@/pages/CrossAnalysis";
 
 function Router() {
   return (
@@ -14,18 +15,23 @@ function Router() {
       <Route path="/" component={Breakouts} />
       <Route path="/reversals" component={Reversals} />
       <Route path="/structure" component={Structure} />
+      <Route path="/cross-analysis" component={CrossAnalysis} />
       <Route component={NotFound} />
     </Switch>
   );
 }
 
+import { TimezoneProvider } from "@/lib/timezone-context";
+
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <Toaster />
-        <Router />
-      </TooltipProvider>
+      <TimezoneProvider>
+        <TooltipProvider>
+          <Toaster />
+          <Router />
+        </TooltipProvider>
+      </TimezoneProvider>
     </QueryClientProvider>
   );
 }
