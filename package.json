@@ -13,6 +13,7 @@
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist/public"
   },
+  "homepage": "https://Nutopia13.github.io/BTC-USDT-2025-IB",
   "dependencies": {
     "@hookform/resolvers": "^3.10.0",
     "@jridgewell/trace-mapping": "^0.3.25",
