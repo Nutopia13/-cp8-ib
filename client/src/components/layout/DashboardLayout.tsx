@@ -15,10 +15,10 @@ export function DashboardLayout({ children, title = "CP-8", subtitle, dateRange 
   const [location] = useLocation();
   const { timezone, setTimezone } = useTimezone();
 
-  const tabs = [
+  const strategyTab = { name: "Strategy", path: "/strategy" };
+  const ibTabs = [
     { name: "Breakouts", path: "/" },
     { name: "Reversals", path: "/reversals" },
-    { name: "Structure", path: "/structure" },
     { name: "Cross-Analysis", path: "/cross-analysis" },
   ];
 
@@ -33,30 +33,51 @@ export function DashboardLayout({ children, title = "CP-8", subtitle, dateRange 
               {subtitle && <p className="text-xs text-muted-foreground hidden sm:block">{subtitle}</p>}
             </div>
 
-            <nav className="flex items-center space-x-1 bg-muted/50 p-1 rounded-lg">
-              {tabs.map((tab) => {
-                // Determine if this tab is active. 
-                // For root path "/", only active if location is strictly "/"
-                // For other paths, active if location starts with path
-                const isActive = tab.path === "/"
-                  ? location === "/"
-                  : location.startsWith(tab.path);
+            <nav className="flex items-center space-x-2">
+              {/* Strategy Tab */}
+              <div className="bg-muted/50 p-1 rounded-lg">
+                <Link href={strategyTab.path}>
+                  <span
+                    className={cn(
+                      "px-4 py-1.5 text-sm font-medium rounded-md transition-all cursor-pointer",
+                      location === strategyTab.path
+                        ? "bg-background text-foreground shadow-sm"
+                        : "text-muted-foreground hover:text-foreground hover:bg-background/50"
+                    )}
+                  >
+                    {strategyTab.name}
+                  </span>
+                </Link>
+              </div>
 
-                return (
-                  <Link key={tab.path} href={tab.path}>
-                    <span
-                      className={cn(
-                        "px-4 py-1.5 text-sm font-medium rounded-md transition-all cursor-pointer",
-                        isActive
-                          ? "bg-background text-foreground shadow-sm"
-                          : "text-muted-foreground hover:text-foreground hover:bg-background/50"
-                      )}
-                    >
-                      {tab.name}
-                    </span>
-                  </Link>
-                );
-              })}
+              {/* Separator */}
+              <div className="h-6 w-px bg-border mx-1" />
+
+              {/* IB Group */}
+              <div className="bg-muted/50 p-1 rounded-lg flex items-center gap-0.5">
+                <span className="text-[10px] text-muted-foreground font-medium px-2">IB</span>
+                <div className="h-4 w-px bg-border/50 mx-0.5" />
+                {ibTabs.map((tab) => {
+                  const isActive = tab.path === "/"
+                    ? location === "/"
+                    : location.startsWith(tab.path);
+
+                  return (
+                    <Link key={tab.path} href={tab.path}>
+                      <span
+                        className={cn(
+                          "px-3 py-1.5 text-sm font-medium rounded-md transition-all cursor-pointer",
+                          isActive
+                            ? "bg-background text-foreground shadow-sm"
+                            : "text-muted-foreground hover:text-foreground hover:bg-background/50"
+                        )}
+                      >
+                        {tab.name}
+                      </span>
+                    </Link>
+                  );
+                })}
+              </div>
             </nav>
           </div>
 

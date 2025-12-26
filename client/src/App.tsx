@@ -6,16 +6,16 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import NotFound from "@/pages/not-found";
 import Breakouts from "@/pages/Breakouts";
 import Reversals from "@/pages/Reversals";
-import Structure from "@/pages/Structure";
 import CrossAnalysis from "@/pages/CrossAnalysis";
+import Strategy from "@/pages/Strategy";
 
 function Router() {
   return (
     <Switch>
       <Route path="/" component={Breakouts} />
       <Route path="/reversals" component={Reversals} />
-      <Route path="/structure" component={Structure} />
       <Route path="/cross-analysis" component={CrossAnalysis} />
+      <Route path="/strategy" component={Strategy} />
       <Route component={NotFound} />
     </Switch>
   );
