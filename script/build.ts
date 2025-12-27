@@ -38,6 +38,7 @@ async function buildAll() {
   console.log("building client...");
   await viteBuild();
 
+
   console.log("building server...");
   const pkg = JSON.parse(await readFile("package.json", "utf-8"));
   const allDeps = [
@@ -45,6 +46,28 @@ async function buildAll() {
     ...Object.keys(pkg.devDependencies || {}),
   ];
   const externals = allDeps.filter((dep) => !allowlist.includes(dep));
+
+  // Add Node.js built-in modules to external list for ESM compatibility
+  const nodeBuiltins = [
+    "path",
+    "fs",
+    "fs/promises",
+    "http",
+    "https",
+    "url",
+    "crypto",
+    "stream",
+    "util",
+    "events",
+    "buffer",
+    "querystring",
+    "os",
+    "net",
+    "tls",
+    "child_process",
+    "worker_threads",
+  ];
+  externals.push(...nodeBuiltins);
 
   await esbuild({
     entryPoints: ["server/index.ts"],
