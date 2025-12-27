@@ -1,16 +1,13 @@
 // Vercel serverless function entry point
-// This imports the compiled Express app and exports it as a Vercel handler
+import { createApp } from '../dist/index.mjs';
 
-import { fileURLToPath } from 'url';
-import { dirname, join } from 'path';
-import { createRequire } from 'module';
+let app;
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-const require = createRequire(import.meta.url);
+export default async function handler(req, res) {
+    // Initialize app on first request (cold start)
+    if (!app) {
+        app = await createApp();
+    }
 
-// Import the bundled Express app
-const app = require(join(__dirname, '..', 'dist', 'index.cjs'));
-
-// Export for Vercel serverless
-export default app;
+    return app(req, res);
+}
