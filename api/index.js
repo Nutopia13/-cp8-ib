@@ -1,5 +1,5 @@
 // Vercel serverless function entry point
-import { createApp } from '../dist/index.mjs';
+import { createApp } from '../dist/server/index.js';
 
 let app;
 

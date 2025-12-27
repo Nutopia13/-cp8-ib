@@ -40,48 +40,22 @@ async function buildAll() {
 
 
   console.log("building server...");
-  const pkg = JSON.parse(await readFile("package.json", "utf-8"));
-  const allDeps = [
-    ...Object.keys(pkg.dependencies || {}),
-    ...Object.keys(pkg.devDependencies || {}),
-  ];
-  const externals = allDeps.filter((dep) => !allowlist.includes(dep));
 
-  // Add Node.js built-in modules to external list for ESM compatibility
-  const nodeBuiltins = [
-    "path",
-    "fs",
-    "fs/promises",
-    "http",
-    "https",
-    "url",
-    "crypto",
-    "stream",
-    "util",
-    "events",
-    "buffer",
-    "querystring",
-    "os",
-    "net",
-    "tls",
-    "child_process",
-    "worker_threads",
-  ];
-  externals.push(...nodeBuiltins);
+  // Use TypeScript compiler instead of esbuild to avoid ESM require() issues
+  const tscResult = await import("child_process").then(cp =>
+    new Promise((resolve, reject) => {
+      const proc = cp.spawn("npx", ["tsc", "--project", "tsconfig.server.json"], {
+        stdio: "inherit",
+        shell: true
+      });
+      proc.on("close", (code) => {
+        if (code === 0) resolve(code);
+        else reject(new Error(`tsc exited with code ${code}`));
+      });
+    })
+  );
 
-  await esbuild({
-    entryPoints: ["server/index.ts"],
-    platform: "node",
-    bundle: true,
-    format: "esm",
-    outfile: "dist/index.mjs",
-    define: {
-      "process.env.NODE_ENV": '"production"',
-    },
-    minify: true,
-    external: externals,
-    logLevel: "info",
-  });
+  console.log("✓ server compiled");
 }
 
 buildAll().catch((err) => {
