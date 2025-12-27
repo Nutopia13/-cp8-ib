@@ -1,12 +1,15 @@
 {
+    "version": 2,
     "buildCommand": "npm run build",
-    "outputDirectory": "dist/public",
-    "cleanUrls": true,
-    "trailingSlash": false,
-    "rewrites": [
+    "functions": {
+        "api/index.js": {
+            "maxDuration": 10
+        }
+    },
+    "routes": [
         {
-            "source": "/((?!.*\\.).*)",
-            "destination": "/index.html"
+            "src": "/(.*)",
+            "dest": "/api/index.js"
         }
     ]
 }

@@ -6,7 +6,7 @@ import runtimeErrorOverlay from "@replit/vite-plugin-runtime-error-modal";
 import { metaImagesPlugin } from "./vite-plugin-meta-images";
 
 export default defineConfig({
-  base: "/BTC-USDT-2025-IB/",
+  base: process.env.GITHUB_PAGES === "true" ? "/BTC-USDT-2025-IB/" : "/",
   plugins: [
     react(),
     runtimeErrorOverlay(),

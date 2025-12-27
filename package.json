@@ -10,7 +10,7 @@
     "start": "node dist/index.cjs",
     "check": "tsc",
     "db:push": "drizzle-kit push",
-    "predeploy": "npm run build",
+    "predeploy": "cross-env GITHUB_PAGES=true npm run build",
     "deploy": "gh-pages -d dist/public"
   },
   "homepage": "https://Nutopia13.github.io/BTC-USDT-2025-IB",
@@ -95,6 +95,7 @@
     "@types/ws": "^8.5.13",
     "@vitejs/plugin-react": "^5.0.4",
     "autoprefixer": "^10.4.21",
+    "cross-env": "^10.1.0",
     "drizzle-kit": "^0.31.4",
     "esbuild": "^0.25.0",
     "gh-pages": "^6.3.0",
