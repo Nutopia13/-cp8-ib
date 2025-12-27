@@ -1,13 +1,11 @@
 {
     "buildCommand": "npm run build",
     "outputDirectory": "dist/public",
+    "cleanUrls": true,
+    "trailingSlash": false,
     "rewrites": [
         {
-            "source": "/assets/(.*)",
-            "destination": "/assets/$1"
-        },
-        {
-            "source": "/(.*)",
+            "source": "/((?!.*\\.).*)",
             "destination": "/index.html"
         }
     ]
