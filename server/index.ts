@@ -1,8 +1,13 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import express, { type Request, Response, NextFunction } from "express";
+import { Server as SocketIOServer } from "socket.io";
 import { registerRoutes } from "./routes";
 import { serveStatic } from "./static";
+import { binanceWS } from "./services/binanceWS";
+import { initializeAllTimeframes } from "./services/historicalData";
+import { calculatePulse, calculateAllPulses, checkThresholdCrossing, type PulseData } from "./pulse/service";
+import type { Timeframe } from "./services/dataStore";
 
 declare module "http" {
   interface IncomingMessage {
@@ -21,9 +26,95 @@ export function log(message: string, source = "express") {
   console.log(`${formattedTime} [${source}] ${message}`);
 }
 
-export async function createApp(): Promise<Express> {
+// Store previous pulse scores for threshold crossing detection
+const previousPulseScores = new Map<Timeframe, number>();
+
+export async function createApp(): Promise<{ app: Express; httpServer: Server }> {
   const app = express();
   const httpServer = createServer(app);
+
+  // Initialize Socket.IO
+  const io = new SocketIOServer(httpServer, {
+    cors: {
+      origin: "*",
+      methods: ["GET", "POST"]
+    }
+  });
+
+  // Track connected clients
+  io.on('connection', (socket) => {
+    log(`Client connected: ${socket.id}`, 'socket.io');
+
+    // Send current pulse data on connection
+    const allPulses = calculateAllPulses();
+    allPulses.forEach((pulse, timeframe) => {
+      if (pulse) {
+        socket.emit('pulseUpdate', pulse);
+      }
+    });
+
+    socket.on('disconnect', () => {
+      log(`Client disconnected: ${socket.id}`, 'socket.io');
+    });
+  });
+
+  // Initialize market pulse system
+  (async () => {
+    try {
+      log('Initializing market pulse system...', 'pulse');
+
+      // Fetch historical data
+      await initializeAllTimeframes('BTCUSDT', 30);
+      log('✓ Historical data loaded', 'pulse');
+
+      // Connect to Binance WebSocket
+      binanceWS.connect();
+
+      // Handle candle close events
+      binanceWS.on('candleClosed', ({ timeframe, candle }) => {
+        log(`Candle closed: ${timeframe} at ${new Date(candle.timestamp).toISOString()}`, 'pulse');
+
+        // Calculate new pulse
+        const pulse = calculatePulse(timeframe);
+        if (pulse) {
+          // Check for threshold crossings
+          const previousScore = previousPulseScores.get(timeframe);
+          const crossing = checkThresholdCrossing(previousScore || null, pulse.pulse_score);
+
+          if (crossing) {
+            log(
+              `⚠️  Pulse ${crossing.direction} through ${crossing.threshold} for ${timeframe}: ${pulse.pulse_score}`,
+              'pulse'
+            );
+          }
+
+          // Store current score
+          previousPulseScores.set(timeframe, pulse.pulse_score);
+
+          // Broadcast to all connected clients
+          io.emit('pulseUpdate', pulse);
+          log(`Pulse updated for ${timeframe}: Score ${pulse.pulse_score} (${pulse.signal})`, 'pulse');
+        }
+      });
+
+      // Handle real-time updates (for charts)
+      binanceWS.on('candleUpdate', ({ timeframe, candle }) => {
+        io.emit('candleUpdate', { timeframe, candle });
+      });
+
+      binanceWS.on('connected', () => {
+        log('✓ WebSocket connected to Binance', 'pulse');
+      });
+
+      binanceWS.on('disconnected', () => {
+        log('✗ WebSocket disconnected from Binance', 'pulse');
+      });
+
+      log('✓ Market pulse system initialized', 'pulse');
+    } catch (error) {
+      console.error('[Pulse] Initialization error:', error);
+    }
+  })();
 
 
   app.use(
@@ -82,14 +173,13 @@ export async function createApp(): Promise<Express> {
     await setupVite(httpServer, app);
   }
 
-  return app;
+  return { app, httpServer };
 }
 
 // Only start the server if we're not in a serverless environment
 if (process.env.VERCEL !== "1") {
   (async () => {
-    const app = await createApp();
-    const httpServer = createServer(app);
+    const { httpServer } = await createApp();
 
     // ALWAYS serve the app on the port specified in the environment variable PORT
     // Other ports are firewalled. Default to 5000 if not specified.

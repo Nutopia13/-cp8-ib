@@ -30,22 +30,22 @@ export const breakoutTimeData = [
 ];
 
 export const breakoutTableData = [
-  { time: "07:30", sessions: 252, up: 16, down: 16, both: 220, pct: 87.3 },
-  { time: "08:00", sessions: 252, up: 18, down: 23, both: 211, pct: 83.7 },
-  { time: "08:30", sessions: 252, up: 27, down: 36, both: 189, pct: 75.0 },
-  { time: "09:00", sessions: 252, up: 21, down: 37, both: 194, pct: 77.0 },
-  { time: "09:30", sessions: 252, up: 69, down: 73, both: 109, pct: 43.3 },
-  { time: "10:00", sessions: 252, up: 72, down: 78, both: 101, pct: 40.1 },
-  { time: "10:30", sessions: 252, up: 68, down: 82, both: 101, pct: 40.1 },
-  { time: "11:00", sessions: 252, up: 69, down: 72, both: 111, pct: 44.1 },
-  { time: "11:30", sessions: 252, up: 70, down: 65, both: 117, pct: 46.4 },
-  { time: "12:00", sessions: 252, up: 66, down: 65, both: 121, pct: 48.0 },
-  { time: "12:30", sessions: 252, up: 72, down: 68, both: 109, pct: 43.3 },
-  { time: "13:00", sessions: 252, up: 74, down: 68, both: 110, pct: 43.7 },
-  { time: "13:30", sessions: 252, up: 68, down: 74, both: 103, pct: 40.9 },
-  { time: "14:00", sessions: 252, up: 81, down: 80, both: 86, pct: 34.1 },
-  { time: "14:30", sessions: 252, up: 98, down: 92, both: 56, pct: 22.2 },
-  { time: "15:00", sessions: 252, up: 91, down: 104, both: 13, pct: 5.2 }
+  { time: "07:30", sessions: 253, up: 13, down: 14, both: 226, pct: 89.3 },
+  { time: "08:00", sessions: 253, up: 13, down: 18, both: 222, pct: 87.8 },
+  { time: "08:30", sessions: 253, up: 25, down: 28, both: 200, pct: 79.1 },
+  { time: "09:00", sessions: 253, up: 17, down: 29, both: 207, pct: 81.8 },
+  { time: "09:30", sessions: 253, up: 51, down: 58, both: 144, pct: 56.9 },
+  { time: "10:00", sessions: 253, up: 54, down: 67, both: 132, pct: 52.2 },
+  { time: "10:30", sessions: 253, up: 51, down: 65, both: 137, pct: 54.2 },
+  { time: "11:00", sessions: 253, up: 52, down: 51, both: 150, pct: 59.3 },
+  { time: "11:30", sessions: 253, up: 55, down: 47, both: 151, pct: 59.7 },
+  { time: "12:00", sessions: 253, up: 53, down: 44, both: 156, pct: 61.7 },
+  { time: "12:30", sessions: 253, up: 47, down: 43, both: 163, pct: 64.4 },
+  { time: "13:00", sessions: 253, up: 51, down: 40, both: 161, pct: 63.6 },
+  { time: "13:30", sessions: 252, up: 41, down: 42, both: 166, pct: 65.9 },
+  { time: "14:00", sessions: 252, up: 41, down: 40, both: 171, pct: 67.9 },
+  { time: "14:30", sessions: 252, up: 55, down: 42, both: 155, pct: 61.5 },
+  { time: "15:00", sessions: 252, up: 53, down: 46, both: 153, pct: 60.7 }
 ];
 
 export const heatmapData = Array.from({ length: 7 }, (_, day) => {

@@ -34,6 +34,11 @@ export async function setupVite(server: Server, app: Express) {
   app.use("*", async (req, res, next) => {
     const url = req.originalUrl;
 
+    // Skip Socket.IO requests - let them pass through to Socket.IO handler
+    if (url.startsWith('/socket.io/')) {
+      return next();
+    }
+
     try {
       const clientTemplate = path.resolve(
         import.meta.dirname,

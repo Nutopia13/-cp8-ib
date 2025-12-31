@@ -16,6 +16,7 @@ export function DashboardLayout({ children, title = "CP-8", subtitle, dateRange 
   const { timezone, setTimezone } = useTimezone();
 
   const strategyTab = { name: "Strategy", path: "/strategy" };
+  const optionsTab = { name: "Options", path: "/options" };
   const ibTabs = [
     { name: "Breakouts", path: "/" },
     { name: "Reversals", path: "/reversals" },
@@ -46,6 +47,25 @@ export function DashboardLayout({ children, title = "CP-8", subtitle, dateRange 
                     )}
                   >
                     {strategyTab.name}
+                  </span>
+                </Link>
+              </div>
+
+              {/* Separator */}
+              <div className="h-6 w-px bg-border mx-1" />
+
+              {/* Options Tab */}
+              <div className="bg-muted/50 p-1 rounded-lg">
+                <Link href={optionsTab.path}>
+                  <span
+                    className={cn(
+                      "px-4 py-1.5 text-sm font-medium rounded-md transition-all cursor-pointer",
+                      location === optionsTab.path
+                        ? "bg-background text-foreground shadow-sm"
+                        : "text-muted-foreground hover:text-foreground hover:bg-background/50"
+                    )}
+                  >
+                    {optionsTab.name}
                   </span>
                 </Link>
               </div>

@@ -4,7 +4,8 @@ import {
   LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Area, ComposedChart
 } from "recharts";
 import { breakoutTimeData, breakoutStats, breakoutTableData, heatmapData } from "@/lib/mock-data";
-import { ArrowUp, ArrowDown, Activity, Info, TrendingUp, TrendingDown, Clock, AlertCircle } from "lucide-react";
+import { ArrowUp, ArrowDown, Activity, Info, TrendingUp, TrendingDown, Clock, AlertCircle, X } from "lucide-react";
+import { useState } from "react";
 
 const CustomTooltip = ({ active, payload, label }: any) => {
   if (active && payload && payload.length) {
@@ -24,6 +25,7 @@ import { useTimezone } from "@/lib/timezone-context";
 
 export default function Breakouts() {
   const { formatTime } = useTimezone();
+  const [expandedImage, setExpandedImage] = useState<string | null>(null);
 
   // Transform data for charts/tables with timezone
   const localizedTimeData = breakoutTimeData.map(d => ({ ...d, time: formatTime(d.time) }));
@@ -35,17 +37,17 @@ export default function Breakouts() {
 
   return (
     <DashboardLayout
-      subtitle="Breakouts Analysis - NY Session"
-      dateRange="Jan 1 - Dec 31, 2025"
+      subtitle="IB Analysis (09:30-10:30 ET, 60min) - Real 2025 Data"
+      dateRange="253 Trading Days Analyzed (Jan-Dec 2025)"
     >
       <BentoGrid>
-        {/* Main Chart */}
-        <BentoCard colSpan={8} rowSpan={2} title="Breakout Probability by IB Time" className="min-h-[400px]">
+        {/* Main Chart - Breakout Success by IB Time */}
+        <BentoCard colSpan={8} rowSpan={2} title="Breakout Success % by IB Start Time (30-min IB, analyzed until 00:00)" className="min-h-[400px]">
           <div className="w-full h-[320px] mt-2">
             <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={breakoutTimeData} margin={{ top: 5, right: 20, bottom: 5, left: 0 }}>
+              <LineChart data={localizedTableData.map(d => ({ time: d.time, success: (100 - d.pct).toFixed(1) }))} margin={{ top: 5, right: 20, bottom: 5, left: 0 }}>
                 <defs>
-                  <linearGradient id="colorProb" x1="0" y1="0" x2="0" y2="1">
+                  <linearGradient id="colorSuccess" x1="0" y1="0" x2="0" y2="1">
                     <stop offset="5%" stopColor="var(--color-bullish)" stopOpacity={0.3} />
                     <stop offset="95%" stopColor="var(--color-bullish)" stopOpacity={0} />
                   </linearGradient>
@@ -64,16 +66,16 @@ export default function Breakouts() {
                   fontSize={12}
                   tickLine={false}
                   axisLine={false}
-                  domain={[0, 100]}
+                  domain={[0, 50]}
                   unit="%"
                 />
                 <Tooltip content={<CustomTooltip />} cursor={{ stroke: 'var(--color-muted-foreground)', strokeWidth: 1 }} />
                 <Line
                   type="monotone"
-                  dataKey="probability"
+                  dataKey="success"
                   stroke="var(--color-bullish)"
                   strokeWidth={2}
-                  dot={false}
+                  dot={{ r: 4, fill: "var(--color-bullish)" }}
                   activeDot={{ r: 6, fill: "var(--color-bullish)" }}
                 />
               </LineChart>
@@ -81,49 +83,64 @@ export default function Breakouts() {
           </div>
         </BentoCard>
 
-        {/* Quick Stats */}
-        <BentoCard colSpan={4} rowSpan={1} title="Quick Stats">
+        {/* Quick Stats - Real 2025 Data */}
+        <BentoCard colSpan={4} rowSpan={1} title="2025 IB Statistics (09:30-10:30 ET)">
           <div className="grid grid-cols-2 gap-4 h-full">
             <div className="flex flex-col justify-center p-3 bg-muted/20 rounded-lg border border-border/50">
               <span className="text-xs text-muted-foreground flex items-center gap-1">
-                <Activity size={12} /> Total Sessions
+                <Activity size={12} /> Total Days
               </span>
-              <span className="text-2xl font-mono font-bold mt-1">{breakoutStats.totalSessions}</span>
+              <span className="text-2xl font-mono font-bold mt-1">253</span>
             </div>
             <div className="flex flex-col justify-center p-3 bg-muted/20 rounded-lg border border-border/50">
               <span className="text-xs text-muted-foreground flex items-center gap-1">
-                <TrendingUp size={12} /> Avg Breakouts
+                <TrendingUp size={12} /> Breakout Rate
               </span>
-              <span className="text-2xl font-mono font-bold mt-1 text-bullish">{breakoutStats.avgBreakouts}</span>
+              <span className="text-2xl font-mono font-bold mt-1 text-bullish">98%</span>
             </div>
-            <div className="col-span-2 flex flex-col justify-center p-3 bg-muted/20 rounded-lg border border-border/50">
+            <div className="flex flex-col justify-center p-3 bg-muted/20 rounded-lg border border-border/50">
               <span className="text-xs text-muted-foreground flex items-center gap-1">
-                <Clock size={12} /> Peak Breakout Time
+                <Info size={12} /> Avg IB Range
               </span>
-              <span className="text-xl font-mono font-bold mt-1 text-warning">{formatTime(breakoutStats.peakTime)}</span>
+              <span className="text-xl font-mono font-bold mt-1 text-cyan-400">$1,391</span>
+            </div>
+            <div className="flex flex-col justify-center p-3 bg-muted/20 rounded-lg border border-border/50">
+              <span className="text-xs text-muted-foreground flex items-center gap-1">
+                <Clock size={12} /> Avg Breakout Time
+              </span>
+              <span className="text-xl font-mono font-bold mt-1 text-warning">59 min</span>
             </div>
           </div>
         </BentoCard>
 
-        {/* Key Insights */}
-        <BentoCard colSpan={4} rowSpan={1} title="Key Insights">
+        {/* Key Insights - Real 2025 Findings */}
+        <BentoCard colSpan={4} rowSpan={1} title="Key Findings">
           <div className="space-y-3">
             <div className="flex items-start gap-3">
               <div className="w-6 h-6 rounded-full bg-success/10 flex items-center justify-center shrink-0 mt-0.5">
                 <TrendingUp size={14} className="text-success" />
               </div>
               <div>
-                <p className="text-sm font-medium">Highest Probability</p>
-                <p className="text-xs text-muted-foreground">Breakouts peak at {breakoutStats.highest} during {formatTime("14:00")}-{formatTime("15:00")} window.</p>
+                <p className="text-sm font-medium">Small IB → High Volatility</p>
+                <p className="text-xs text-muted-foreground">100% breakout rate, 30.2% reversal risk, 1.33× avg extension</p>
               </div>
             </div>
             <div className="flex items-start gap-3">
-              <div className="w-6 h-6 rounded-full bg-bearish/10 flex items-center justify-center shrink-0 mt-0.5">
-                <AlertCircle size={14} className="text-bearish" />
+              <div className="w-6 h-6 rounded-full bg-warning/10 flex items-center justify-center shrink-0 mt-0.5">
+                <Activity size={14} className="text-warning" />
               </div>
               <div>
-                <p className="text-sm font-medium">Lowest Probability</p>
-                <p className="text-xs text-muted-foreground">Early morning ({formatTime("07:30")}) is chop city ({breakoutStats.lowest} success rate).</p>
+                <p className="text-sm font-medium">Medium IB → Balanced</p>
+                <p className="text-xs text-muted-foreground">97.6% breakout, 21.8% reversal, most common (49% of days)</p>
+              </div>
+            </div>
+            <div className="flex items-start gap-3">
+              <div className="w-6 h-6 rounded-full bg-bullish/10 flex items-center justify-center shrink-0 mt-0.5">
+                <TrendingDown size={14} className="text-bullish" />
+              </div>
+              <div>
+                <p className="text-sm font-medium">Large IB → Trend Days</p>
+                <p className="text-xs text-muted-foreground">91.7% breakout, only 4.2% reversal, strong directional bias</p>
               </div>
             </div>
           </div>
@@ -200,7 +217,110 @@ export default function Breakouts() {
           </div>
         </BentoCard>
 
+        {/* Resources Section - Analysis PNG Charts */}
+        <BentoCard colSpan={12} rowSpan={3} title="📊 Detailed Analysis Resources">
+          <div className="space-y-4">
+            <div className="bg-slate-900/30 border border-slate-800 rounded-lg p-4">
+              <h3 className="text-lg font-semibold text-white mb-2 flex items-center gap-2">
+                <Info size={18} className="text-cyan-400" />
+                2025 Initial Balance Study Summary
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm text-muted-foreground">
+                <div>
+                  <p className="font-semibold text-white mb-1">Study Parameters:</p>
+                  <ul className="list-disc list-inside space-y-1">
+                    <li><span className="text-cyan-400">IB Period:</span> 09:30-10:30 ET (60 minutes)</li>
+                    <li><span className="text-cyan-400">Analysis Window:</span> 09:30-16:00 ET</li>
+                    <li><span className="text-cyan-400">Dataset:</span> 253 trading days (Jan-Dec 2025)</li>
+                    <li><span className="text-cyan-400">Asset:</span> BTC/USDT (Binance 5m candles)</li>
+                  </ul>
+                </div>
+                <div>
+                  <p className="font-semibold text-white mb-1">Key Statistics:</p>
+                  <ul className="list-disc list-inside space-y-1">
+                    <li><span className="text-green-400">98%</span> breakout rate (only 2% range-bound)</li>
+                    <li><span className="text-cyan-400">$1,391</span> average IB range (ATR-normalized)</li>
+                    <li><span className="text-yellow-400">59 minutes</span> average time to first breakout</li>
+                    <li><span className="text-orange-400">19.8%</span> of days extend \u003e1.5× IB range</li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+              {[
+                { src: "/ib-analysis/01_ib_size_distribution.png", title: "IB Size Distribution", desc: "Small: 38% | Medium: 49% | Large: 10%" },
+                { src: "/ib-analysis/02_breakout_frequency_by_size.png", title: "Breakout Patterns by Size", desc: "How IB size affects breakout type" },
+                { src: "/ib-analysis/03_hour_of_day_breakout.png", title: "Breakout Timing", desc: "When breakouts occur after IB" },
+                { src: "/ib-analysis/04_range_extension_distribution.png", title: "Range Extensions", desc: "How far price extends beyond IB" },
+                { src: "/ib-analysis/05_day_of_week_patterns.png", title: "Day-of-Week Analysis", desc: "Monday-Friday breakout patterns" },
+                { src: "/ib-analysis/06_conditional_probability_matrix.png", title: "Probability Matrix", desc: "IB Size conditional probabilities" },
+              ].map((chart, idx) => (
+                <div
+                  key={idx}
+                  className="bg-slate-900/50 border border-slate-800 rounded-lg overflow-hidden hover:border-cyan-500/50 transition-colors cursor-pointer"
+                  onClick={() => setExpandedImage(chart.src)}
+                >
+                  <img
+                    src={chart.src}
+                    alt={chart.title}
+                    className="w-full h-48 object-contain bg-white p-2"
+                  />
+                  <div className="p-3">
+                    <h4 className="font-semibold text-white text-sm mb-1">{chart.title}</h4>
+                    <p className="text-xs text-muted-foreground">{chart.desc}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="bg-gradient-to-r from-cyan-900/20 to-blue-900/20 border border-cyan-500/30 rounded-lg p-4">
+              <div className="flex items-start gap-3">
+                <AlertCircle size={20} className="text-cyan-400 shrink-0 mt-0.5" />
+                <div className="text-sm">
+                  <p className="font-semibold text-white mb-2">Critical Trading Insights:</p>
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-3 text-muted-foreground">
+                    <div>
+                      <span className="text-green-400 font-semibold">Small IB Days:</span>
+                      <p>100% breakout probability with highest volatility (1.33× avg extension). 30.2% reversal risk means both-way action likely.</p>
+                    </div>
+                    <div>
+                      <span className="text-yellow-400 font-semibold">Medium IB Days:</span>
+                      <p>Most common pattern (49% of days). 97.6% breakout rate with 21.8% reversal risk. Balanced risk/reward profile.</p>
+                    </div>
+                    <div>
+                      <span className="text-cyan-400 font-semibold">Large IB Days:</span>
+                      <p>Strong directional bias - only 4.2% both-way breakouts. 91.7% breakout rate. Best for trend following.</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </BentoCard>
+
       </BentoGrid>
+
+      {/* Image Modal */}
+      {expandedImage && (
+        <div
+          className="fixed inset-0 z-50 bg-black/90 flex items-center justify-center p-4"
+          onClick={() => setExpandedImage(null)}
+        >
+          <button
+            onClick={() => setExpandedImage(null)}
+            className="absolute top-4 right-4 p-2 bg-slate-800 hover:bg-slate-700 rounded-full transition-colors"
+          >
+            <X size={24} className="text-white" />
+          </button>
+          <img
+            src={expandedImage}
+            alt="Expanded chart"
+            className="max-w-full max-h-full object-contain"
+            onClick={(e) => e.stopPropagation()}
+          />
+        </div>
+      )}
     </DashboardLayout>
   );
 }

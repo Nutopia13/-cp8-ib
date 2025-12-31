@@ -8,6 +8,7 @@ import Breakouts from "@/pages/Breakouts";
 import Reversals from "@/pages/Reversals";
 import CrossAnalysis from "@/pages/CrossAnalysis";
 import Strategy from "@/pages/Strategy";
+import Options from "@/pages/Options";
 
 function Router() {
   return (
@@ -16,6 +17,7 @@ function Router() {
       <Route path="/reversals" component={Reversals} />
       <Route path="/cross-analysis" component={CrossAnalysis} />
       <Route path="/strategy" component={Strategy} />
+      <Route path="/options" component={Options} />
       <Route component={NotFound} />
     </Switch>
   );

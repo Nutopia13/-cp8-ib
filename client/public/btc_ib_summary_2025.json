@@ -1,0 +1,82 @@
+{
+  "period": "2025-01-01 to 2025-12-19",
+  "total_days": 253,
+  "ib_size_distribution": {
+    "medium": {
+      "count": 124,
+      "pct": 49.0
+    },
+    "small": {
+      "count": 96,
+      "pct": 37.9
+    },
+    "large": {
+      "count": 24,
+      "pct": 9.5
+    },
+    "unknown": {
+      "count": 9,
+      "pct": 3.6
+    }
+  },
+  "breakout_frequency": {
+    "ib_high_only": {
+      "count": 89,
+      "pct": 35.2
+    },
+    "ib_low_only": {
+      "count": 100,
+      "pct": 39.5
+    },
+    "both": {
+      "count": 59,
+      "pct": 23.3
+    },
+    "neither": {
+      "count": 5,
+      "pct": 2.0
+    }
+  },
+  "range_statistics": {
+    "avg_ib_range": 1391.18,
+    "median_ib_range": 1215.05,
+    "std_ib_range": 746.73,
+    "min_ib_range": 251.18,
+    "max_ib_range": 5454.57,
+    "avg_ib_range_pct": 1.408,
+    "avg_ib_range_atr_norm": 40.76
+  },
+  "extension_statistics": {
+    "avg_extension_up": 0.89,
+    "avg_extension_down": 0.86,
+    "pct_extension_gt_1_5x": 19.8,
+    "pct_extension_gt_2_0x": 11.5
+  },
+  "avg_time_to_breakout_hours": 0.99,
+  "conditional_probabilities": [
+    {
+      "ib_size": "small",
+      "count": 96,
+      "breakout_pct": 100.0,
+      "both_broken_pct": 30.2,
+      "close_outside_ib_pct": 70.8,
+      "avg_max_extension": 1.33
+    },
+    {
+      "ib_size": "medium",
+      "count": 124,
+      "breakout_pct": 97.6,
+      "both_broken_pct": 21.8,
+      "close_outside_ib_pct": 60.5,
+      "avg_max_extension": 0.84
+    },
+    {
+      "ib_size": "large",
+      "count": 24,
+      "breakout_pct": 91.7,
+      "both_broken_pct": 4.2,
+      "close_outside_ib_pct": 58.3,
+      "avg_max_extension": 0.5
+    }
+  ]
+}
